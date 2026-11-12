@@ -1,0 +1,167 @@
+---
+import { getDict, type Lang } from '../i18n/translations';
+
+interface Props {
+	lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = getDict(lang).hero;
+
+const stats = [
+	{ value: '15+', label: t.statYears },
+	{ value: '2,400+', label: t.statGuests },
+	{ value: '12', label: t.statDestinations },
+];
+---
+
+<section class="hero">
+	<div class="inner">
+		<p class="eyebrow" data-animate style="--anim-delay: 0.05s">{t.eyebrow}</p>
+		<h1 data-animate style="--anim-delay: 0.15s; --anim-duration: 0.6s">
+			{t.h1Line1}<br />
+			{t.h1Line2Pre}<span class="accent">{t.h1Accent}</span>
+		</h1>
+		<p class="lede" data-animate style="--anim-delay: 0.25s">
+			{t.lede}
+		</p>
+		<div class="actions" data-animate style="--anim-delay: 0.35s">
+			<a class="btn btn-primary" href="#packages">{t.ctaPrimary}</a>
+			<a class="btn btn-secondary" href="#contact">{t.ctaSecondary}</a>
+		</div>
+
+		<dl class="stats" data-animate style="--anim-delay: 0.45s">
+			{
+				stats.map((s) => (
+					<div>
+						<dt>{s.value}</dt>
+						<dd>{s.label}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</div>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		display: flex;
+		align-items: center;
+		min-height: 92vh;
+		padding: 4rem 1.5rem;
+		background:
+			linear-gradient(180deg, rgba(18, 18, 18, 0.55) 0%, rgba(18, 18, 18, 0.82) 100%),
+			url('https://images.unsplash.com/photo-1761078206756-68d3023f3021?auto=format&fit=crop&w=2400&q=70')
+				center / cover no-repeat;
+		color: var(--color-paper);
+	}
+
+	.inner {
+		max-width: 780px;
+		margin: 0 auto;
+		text-align: center;
+	}
+
+	h1 {
+		font-size: clamp(2.8rem, 7.5vw, 4.8rem);
+		color: var(--color-paper);
+		margin: 0.6rem 0 1.2rem;
+	}
+
+	h1 .accent {
+		color: var(--color-accent);
+	}
+
+	.lede {
+		font-size: 1.1rem;
+		line-height: 1.75;
+		color: var(--color-muted-on-dark);
+		max-width: 540px;
+		margin: 0 auto 2.2rem;
+	}
+
+	.actions {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+		margin-bottom: 3.6rem;
+	}
+
+	.actions .btn-primary {
+		background-color: var(--color-accent);
+		color: var(--color-ink);
+	}
+
+	.actions .btn-primary:hover {
+		background-color: var(--color-paper);
+	}
+
+	.actions .btn-secondary {
+		border-color: rgba(248, 241, 228, 0.35);
+		color: var(--color-paper);
+	}
+
+	.actions .btn-secondary:hover {
+		background-color: var(--color-paper);
+		border-color: var(--color-paper);
+		color: var(--color-ink);
+	}
+
+	.stats {
+		display: flex;
+		justify-content: center;
+		margin: 0;
+	}
+
+	.stats > div {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		padding: 0 clamp(1.4rem, 4vw, 2.6rem);
+		border-left: 1px solid rgba(248, 241, 228, 0.18);
+	}
+
+	.stats > div:first-child {
+		border-left: none;
+		padding-left: 0;
+	}
+
+	.stats dt {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: clamp(1.5rem, 4vw, 2.1rem);
+		color: var(--color-paper);
+	}
+
+	.stats dd {
+		font-family: var(--font-accent);
+		font-size: 0.75rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-muted-on-dark);
+		margin: 0;
+	}
+
+	@media (max-width: 440px) {
+		.stats {
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+		}
+
+		.stats > div {
+			width: 100%;
+			max-width: 220px;
+			border-left: none;
+			border-top: 1px solid rgba(248, 241, 228, 0.18);
+			padding: 0.8rem 0 0;
+		}
+
+		.stats > div:first-child {
+			border-top: none;
+			padding-top: 0;
+		}
+	}
+</style>

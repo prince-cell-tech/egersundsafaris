@@ -1,0 +1,171 @@
+---
+import Layout from '../layouts/Layout.astro';
+import WelcomePopup from './WelcomePopup.astro';
+import Hero from './Hero.astro';
+import About from './About.astro';
+import SafariTypes from './SafariTypes.astro';
+import Packages from './Packages.astro';
+import PricingGuide from './PricingGuide.astro';
+import EnquiryForm from './EnquiryForm.astro';
+import { getDict, type Lang } from '../i18n/translations';
+
+interface Props {
+	lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = getDict(lang);
+---
+
+<Layout lang={lang}>
+	<WelcomePopup lang={lang} />
+	<Hero lang={lang} />
+	<About lang={lang} />
+	<SafariTypes lang={lang} />
+	<Packages lang={lang} />
+	<PricingGuide lang={lang} />
+
+	<section class="contact" id="contact">
+		<div class="intro" data-animate>
+			<p class="eyebrow">{t.contact.eyebrow}</p>
+			<h2>{t.contact.heading}</h2>
+			<p>
+				{t.contact.paragraph}
+			</p>
+		</div>
+
+		<div data-animate style="--anim-delay: 0.1s">
+			<EnquiryForm lang={lang} />
+		</div>
+	</section>
+
+	<footer>
+		<img src="/WA_1789363446432.jpg" alt="Egersund Safaris logo" width="48" height="48" />
+
+		<div class="socials">
+			<a href="https://wa.me/255682307107" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+				<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+					<path
+						d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.82L2 22l5.4-1.42a9.87 9.87 0 0 0 4.64 1.18h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.67c2.21 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.42 5.82c0 4.54-3.7 8.24-8.25 8.24a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.2.84.86-3.12-.2-.32a8.18 8.18 0 0 1-1.26-4.37c0-4.55 3.7-8.18 8.29-8.18Zm-4.55 4.3c-.17 0-.44.06-.67.32-.23.25-.88.86-.88 2.1 0 1.23.9 2.42 1.03 2.59.13.17 1.75 2.8 4.33 3.81 2.14.84 2.58.68 3.04.63.46-.04 1.49-.6 1.7-1.19.21-.58.21-1.08.15-1.19-.06-.1-.23-.17-.48-.3-.25-.12-1.49-.73-1.72-.82-.23-.08-.4-.12-.56.13-.17.25-.65.82-.8.98-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.3.37-.44.12-.15.16-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.37-.78-1.87-.2-.49-.41-.42-.56-.43-.14-.01-.31-.01-.48-.01Z"
+					></path>
+				</svg>
+			</a>
+			<a
+				href="https://www.instagram.com/egersundsafaristanzania"
+				target="_blank"
+				rel="noopener"
+				aria-label="Egersund Safaris on Instagram"
+			>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+					<rect x="3" y="3" width="18" height="18" rx="5"></rect>
+					<circle cx="12" cy="12" r="4"></circle>
+					<circle cx="17.3" cy="6.7" r="1"></circle>
+				</svg>
+			</a>
+			<a
+				href="https://www.facebook.com/profile.php?id=61593337448016"
+				target="_blank"
+				rel="noopener"
+				aria-label="Egersund Safaris on Facebook"
+			>
+				<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+					<path
+						d="M13.5 21v-7.7h2.6l.4-3h-3V8.3c0-.87.24-1.46 1.5-1.46H16.6V4.14C16.35 4.1 15.5 4 14.5 4c-2.07 0-3.5 1.26-3.5 3.58v2.72H8.4v3h2.6V21h2.5Z"
+					></path>
+				</svg>
+			</a>
+		</div>
+
+		<p class="tagline">{t.footer.tagline}</p>
+		<p>&copy; {new Date().getFullYear()} Egersund Safaris. {t.footer.journeyTagline}</p>
+	</footer>
+</Layout>
+
+<style>
+	.contact {
+		background: rgba(255, 77, 28, 0.92);
+		color: var(--color-ink);
+		text-align: center;
+		padding: 5.5rem 1.5rem;
+	}
+
+	.contact h2 {
+		font-size: clamp(2.1rem, 5vw, 3.1rem);
+		color: var(--color-ink);
+		margin: 0.5rem 0 1rem;
+	}
+
+	.contact p {
+		color: var(--color-ink-soft);
+		max-width: 480px;
+		margin: 0 auto 1.8rem;
+	}
+
+	.contact .eyebrow {
+		color: var(--color-ink);
+	}
+
+	.contact .intro {
+		margin-bottom: 2.5rem;
+	}
+
+	footer {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 2.5rem 1.5rem;
+		background: rgba(18, 18, 18, 0.92);
+		color: var(--color-muted-on-dark);
+		font-family: var(--font-accent);
+		font-size: 0.85rem;
+		letter-spacing: 0.04em;
+	}
+
+	footer img {
+		border-radius: 2px;
+		border: 1px solid rgba(248, 241, 228, 0.25);
+		object-fit: cover;
+	}
+
+	footer p {
+		margin: 0;
+	}
+
+	footer .tagline {
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-paper);
+		font-size: 0.75rem;
+	}
+
+	.socials {
+		display: flex;
+		gap: 0.9rem;
+	}
+
+	.socials a {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 34px;
+		height: 34px;
+		border: 1px solid rgba(248, 241, 228, 0.25);
+		border-radius: 3px;
+		color: var(--color-muted-on-dark);
+		transition:
+			border-color var(--transition-base),
+			color var(--transition-base);
+	}
+
+	.socials a:hover {
+		border-color: var(--color-accent);
+		color: var(--color-accent);
+	}
+
+	.socials svg {
+		width: 17px;
+		height: 17px;
+	}
+</style>

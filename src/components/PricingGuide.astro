@@ -1,0 +1,256 @@
+---
+import { zanzibarExcursions, dayTrips, transfers } from '../data/pricingGuide';
+import { getDict, type Lang } from '../i18n/translations';
+
+interface Props {
+	lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = getDict(lang).pricingGuide;
+---
+
+<section class="pricing-guide" id="pricing-guide">
+	<div class="intro">
+		<p class="eyebrow" data-animate>{t.eyebrow}</p>
+		<h2 data-animate style="--anim-delay: 0.1s">{t.heading}</h2>
+		<p class="subtext" data-animate style="--anim-delay: 0.15s">{t.subtext}</p>
+	</div>
+
+	<div class="guide-grid">
+		<div class="block" data-animate style="--anim-delay: 0.1s">
+			<h3>{t.zanzibarEyebrow}</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>{t.zanzibarEyebrow}</th>
+						<th>{t.priceColumnLabel}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						zanzibarExcursions.map((row) => (
+							<tr>
+								<td>{row.name}</td>
+								<td class="price">{row.price}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="block" data-animate style="--anim-delay: 0.15s">
+			<h3>{t.dayTripsEyebrow}</h3>
+			<p class="block-sub">{t.dayTripsSubtext}</p>
+			<table>
+				<thead>
+					<tr>
+						<th>{t.dayTripsEyebrow}</th>
+						<th>{t.priceColumnLabel}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						dayTrips.map((row) => (
+							<tr>
+								<td>{row.name}</td>
+								<td class="price">{row.price}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="block" data-animate style="--anim-delay: 0.2s">
+			<h3>{t.multiDayEyebrow}</h3>
+			<p class="block-sub">{t.multiDaySubtext}</p>
+			<ul class="tier-list">
+				{
+					t.multiDayTiers.map((tier) => (
+						<li>
+							<div class="tier-row">
+								<span class="tier-name">{tier.name}</span>
+								<span class="tier-price">{tier.price}</span>
+							</div>
+							<p>{tier.desc}</p>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+
+		<div class="block" data-animate style="--anim-delay: 0.25s">
+			<h3>{t.transfersEyebrow}</h3>
+			<p class="block-sub">{t.transfersSubtext}</p>
+			<table>
+				<thead>
+					<tr>
+						<th>{t.transfersEyebrow}</th>
+						<th>{t.priceColumnLabel}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						transfers.map((row) => (
+							<tr>
+								<td>{row.name}</td>
+								<td class="price">{row.price}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>
+
+<style>
+	.pricing-guide {
+		padding: 6rem 1.5rem;
+		max-width: 1160px;
+		margin: 0 auto;
+	}
+
+	.intro {
+		max-width: 680px;
+		margin: 0 auto 3.5rem;
+		text-align: center;
+	}
+
+	h2 {
+		font-size: clamp(2rem, 4.5vw, 2.9rem);
+		color: var(--color-ink);
+		margin: 0.4rem 0 1rem;
+	}
+
+	.subtext {
+		font-size: 1rem;
+		line-height: 1.7;
+		color: var(--color-muted);
+		margin: 0;
+	}
+
+	.guide-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+		gap: 1.5rem;
+	}
+
+	.block {
+		border: 1px solid var(--color-paper-dim);
+		padding: 1.8rem;
+	}
+
+	.block h3 {
+		font-size: 1.1rem;
+		margin: 0 0 0.3rem;
+		color: var(--color-ink);
+	}
+
+	.block-sub {
+		font-size: 0.85rem;
+		color: var(--color-muted);
+		margin: 0 0 1.2rem;
+		line-height: 1.5;
+	}
+
+	.block:has(.block-sub) h3 {
+		margin-bottom: 0.3rem;
+	}
+
+	.block:not(:has(.block-sub)) table {
+		margin-top: 1.2rem;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	thead th {
+		text-align: left;
+		font-family: var(--font-accent);
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+		padding: 0 0 0.5rem;
+		border-bottom: 1px solid var(--color-paper-dim);
+	}
+
+	thead th:last-child {
+		text-align: right;
+	}
+
+	tbody td {
+		padding: 0.65rem 0;
+		border-bottom: 1px solid var(--color-paper-dim);
+		font-size: 0.9rem;
+		color: var(--color-ink-soft);
+	}
+
+	tbody tr:last-child td {
+		border-bottom: none;
+	}
+
+	td.price {
+		text-align: right;
+		font-family: var(--font-accent);
+		font-weight: 600;
+		color: var(--color-ink);
+		white-space: nowrap;
+	}
+
+	.tier-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.tier-list li {
+		padding: 0.9rem 0;
+		border-bottom: 1px solid var(--color-paper-dim);
+	}
+
+	.tier-list li:last-child {
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+
+	.tier-list li:first-child {
+		padding-top: 0;
+	}
+
+	.tier-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 1rem;
+		margin-bottom: 0.3rem;
+	}
+
+	.tier-name {
+		font-family: var(--font-accent);
+		font-weight: 600;
+		font-size: 0.9rem;
+		color: var(--color-ink);
+	}
+
+	.tier-price {
+		font-family: var(--font-accent);
+		font-weight: 600;
+		font-size: 0.85rem;
+		color: var(--color-accent-dark);
+		white-space: nowrap;
+	}
+
+	.tier-list p {
+		margin: 0;
+		font-size: 0.85rem;
+		line-height: 1.6;
+		color: var(--color-muted);
+	}
+</style>

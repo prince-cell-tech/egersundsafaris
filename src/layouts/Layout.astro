@@ -1,0 +1,146 @@
+---
+import WhatsAppFab from '../components/WhatsAppFab.astro';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+import { getDict, languages, type Lang } from '../i18n/translations';
+
+interface Props {
+	lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = getDict(lang);
+const current = languages.find((l) => l.code === lang) ?? languages[0];
+
+const siteUrl = Astro.site ?? new URL('https://egersundtanzaniasafaris.com');
+const canonicalURL = new URL(current.path, siteUrl).toString();
+const ogImage = 'https://images.unsplash.com/photo-1761078206756-68d3023f3021?auto=format&fit=crop&w=1200&h=630&q=70';
+
+const title = t.seo.title;
+const description = t.seo.description;
+
+// Open Graph locale codes expect underscores (e.g. en_US, zh_CN).
+const ogLocaleMap: Record<Lang, string> = {
+	en: 'en_US',
+	no: 'nb_NO',
+	sv: 'sv_SE',
+	da: 'da_DK',
+	zh: 'zh_CN',
+	de: 'de_DE',
+};
+
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'TravelAgency',
+	name: 'Egersund Safaris',
+	description,
+	url: siteUrl.toString(),
+	image: ogImage,
+	telephone: '+255682307107',
+	email: 'info@egersundtanzaniasafaris.com',
+	areaServed: {
+		'@type': 'Country',
+		name: 'Tanzania',
+	},
+	address: {
+		'@type': 'PostalAddress',
+		addressCountry: 'TZ',
+		addressRegion: 'Arusha',
+	},
+	sameAs: [`https://wa.me/255682307107`],
+};
+---
+
+<!doctype html>
+<html lang={t.htmlLang}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" href="/WA_1789363446432.jpg" />
+		<meta name="generator" content={Astro.generator} />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="robots" content="index, follow" />
+		<link rel="canonical" href={canonicalURL} />
+
+		{/* hreflang alternates — point search engines to every locale of this same page */}
+		{
+			languages.map((l) => (
+				<link rel="alternate" hreflang={l.code === 'zh' ? 'zh-CN' : l.code} href={new URL(l.path, siteUrl).toString()} />
+			))
+		}
+		<link rel="alternate" hreflang="x-default" href={new URL('/', siteUrl).toString()} />
+
+		{/* Open Graph */}
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Egersund Safaris" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:locale" content={ogLocaleMap[lang]} />
+		{
+			languages
+				.filter((l) => l.code !== lang)
+				.map((l) => <meta property="og:locale:alternate" content={ogLocaleMap[l.code]} />)
+		}
+
+		{/* Twitter */}
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+
+		{/* Structured data */}
+		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+		/>
+	</head>
+	<body>
+		<slot />
+		<LanguageSwitcher lang={lang} />
+		<WhatsAppFab />
+		<style is:global>
+			@import '../styles/tokens.css';
+		</style>
+		<script>
+			const animated = document.querySelectorAll('[data-animate]');
+
+			if (
+				!('IntersectionObserver' in window) ||
+				window.matchMedia('(prefers-reduced-motion: reduce)').matches
+			) {
+				for (const el of animated) el.classList.add('is-visible');
+			} else {
+				const observer = new IntersectionObserver(
+					(entries) => {
+						for (const entry of entries) {
+							if (!entry.isIntersecting) continue;
+							entry.target.classList.add('is-visible');
+							observer.unobserve(entry.target);
+						}
+					},
+					{ threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+				);
+				for (const el of animated) observer.observe(el);
+			}
+		</script>
+	</body>
+</html>
+
+<style>
+	@import '../styles/animations.css';
+
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+	}
+</style>

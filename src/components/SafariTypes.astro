@@ -1,0 +1,98 @@
+---
+import { getDict, type Lang } from '../i18n/translations';
+
+interface Props {
+	lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = getDict(lang).safariTypes;
+---
+
+<section class="safari-types" id="safari-types">
+	<p class="eyebrow" data-animate>{t.eyebrow}</p>
+	<h2 data-animate style="--anim-delay: 0.1s">{t.heading}</h2>
+	<p class="subtext" data-animate style="--anim-delay: 0.15s">{t.subtext}</p>
+
+	<div class="tags" data-animate style="--anim-delay: 0.2s">
+		{
+			t.categories.map((category) => (
+				<button type="button" class="tag" data-category={category}>
+					{category}
+				</button>
+			))
+		}
+	</div>
+</section>
+
+<script>
+	const tags = document.querySelectorAll<HTMLButtonElement>('.safari-types .tag');
+
+	for (const tag of tags) {
+		tag.addEventListener('click', () => {
+			const category = tag.dataset.category || '';
+			const select = document.getElementById('safari-style') as HTMLSelectElement | null;
+
+			if (select) {
+				const match = Array.from(select.options).find((opt) => opt.value === category);
+				if (match) select.value = category;
+			}
+
+			document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+			window.setTimeout(() => {
+				document.getElementById('name')?.focus();
+			}, 500);
+		});
+	}
+</script>
+
+<style>
+	.safari-types {
+		padding: 5rem 1.5rem 6rem;
+		max-width: 860px;
+		margin: 0 auto;
+		text-align: center;
+	}
+
+	h2 {
+		font-size: clamp(1.9rem, 4.2vw, 2.6rem);
+		color: var(--color-ink);
+		margin: 0.4rem 0 0.7rem;
+	}
+
+	.subtext {
+		font-size: 1rem;
+		color: var(--color-muted);
+		margin: 0 0 2.2rem;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.75rem;
+	}
+
+	.tag {
+		font-family: var(--font-accent);
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--color-ink);
+		background: var(--color-paper);
+		border: 2px solid var(--color-ink);
+		border-radius: 4px;
+		padding: 0.7rem 1.3rem;
+		cursor: pointer;
+		transition:
+			background-color var(--transition-base),
+			color var(--transition-base),
+			border-color var(--transition-base);
+	}
+
+	.tag:hover {
+		background-color: var(--color-accent);
+		border-color: var(--color-accent);
+		color: var(--color-ink);
+	}
+</style>

@@ -1,0 +1,15 @@
+# Non-www -> www
+RewriteCond %{HTTP_HOST} ^egersundtanzaniasafaris\.com$ [NC]
+RewriteRule ^(.*)$ https://www.egersundtanzaniasafaris.com/$1 [R=301,L]
+
+# Hostinger (LiteSpeed): website lives in dist/, index.php serves anything
+# mod_rewrite misses. ErrorDocument makes /no/, /sv/, /de/ etc. work even if
+# mod_rewrite is not available.
+RewriteEngine On
+RewriteRule ^_astro/(.*)$ dist/_astro/$1 [L]
+RewriteRule ^images/(.*)$ dist/images/$1 [L]
+RewriteRule ^videos/(.*)$ dist/videos/$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+ErrorDocument 404 /index.php

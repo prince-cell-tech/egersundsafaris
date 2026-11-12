@@ -1,0 +1,154 @@
+---
+import { languages, getDict, type Lang } from '../i18n/translations';
+
+interface Props {
+	lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = getDict(lang);
+---
+
+<div class="lang-switch" id="lang-switch">
+	<button type="button" id="lang-toggle" aria-haspopup="true" aria-expanded="false" aria-label={t.selectLanguage}>
+		<span>{lang.toUpperCase()}</span>
+	</button>
+
+	<div class="menu" id="lang-menu" role="menu">
+		{
+			languages.map((l) => (
+				<a href={l.path} role="menuitem" aria-current={l.code === lang ? 'true' : undefined}>
+					{l.label}
+				</a>
+			))
+		}
+	</div>
+</div>
+
+<script>
+	const wrap = document.getElementById('lang-switch');
+	const toggle = document.getElementById('lang-toggle');
+	const menu = document.getElementById('lang-menu');
+
+	function close() {
+		menu?.classList.remove('open');
+		toggle?.setAttribute('aria-expanded', 'false');
+	}
+
+	function open() {
+		menu?.classList.add('open');
+		toggle?.setAttribute('aria-expanded', 'true');
+	}
+
+	toggle?.addEventListener('click', (event) => {
+		event.stopPropagation();
+		if (menu?.classList.contains('open')) {
+			close();
+		} else {
+			open();
+		}
+	});
+
+	document.addEventListener('click', (event) => {
+		if (wrap && !wrap.contains(event.target as Node)) close();
+	});
+
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape') close();
+	});
+</script>
+
+<style>
+	.lang-switch {
+		position: fixed;
+		top: 1rem;
+		right: 1rem;
+		z-index: 950;
+	}
+
+	#lang-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 42px;
+		height: 42px;
+		padding: 0 0.85rem;
+		border-radius: 4px;
+		border: 1px solid rgba(248, 241, 228, 0.3);
+		background: rgba(18, 18, 18, 0.55);
+		backdrop-filter: blur(4px);
+		color: var(--color-paper);
+		cursor: pointer;
+		transition:
+			background-color var(--transition-base),
+			border-color var(--transition-base);
+	}
+
+	#lang-toggle:hover,
+	#lang-toggle[aria-expanded='true'] {
+		background: var(--color-ink);
+		border-color: var(--color-accent);
+	}
+
+	#lang-toggle span {
+		font-family: var(--font-accent);
+		font-size: 0.85rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+	}
+
+	.menu {
+		position: absolute;
+		top: calc(100% + 0.5rem);
+		right: 0;
+		min-width: 140px;
+		display: none;
+		flex-direction: column;
+		background: var(--color-ink);
+		border: 1px solid rgba(248, 241, 228, 0.14);
+		border-radius: 6px;
+		padding: 0.35rem;
+		box-shadow: 0 12px 28px rgba(18, 18, 18, 0.3);
+	}
+
+	.menu.open {
+		display: flex;
+	}
+
+	.menu a {
+		display: block;
+		padding: 0.55rem 0.7rem;
+		border-radius: 4px;
+		font-family: var(--font-accent);
+		font-size: 0.85rem;
+		font-weight: 500;
+		text-decoration: none;
+		color: var(--color-muted-on-dark);
+		transition:
+			background-color var(--transition-base),
+			color var(--transition-base);
+	}
+
+	.menu a:hover {
+		background: rgba(248, 241, 228, 0.08);
+		color: var(--color-paper);
+	}
+
+	.menu a[aria-current='true'] {
+		color: var(--color-accent);
+		font-weight: 600;
+	}
+
+	@media (max-width: 480px) {
+		.lang-switch {
+			top: 0.75rem;
+			right: 0.75rem;
+		}
+
+		#lang-toggle {
+			min-width: 38px;
+			height: 38px;
+			padding: 0 0.7rem;
+		}
+	}
+</style>

@@ -1,0 +1,343 @@
+---
+import { packages, otherDestinations } from '../data/packages';
+import { getDict, type Lang } from '../i18n/translations';
+
+interface Props {
+	lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const fullDict = getDict(lang);
+const t = fullDict.contact.form;
+const safariCategories = fullDict.safariTypes.categories;
+
+const destinations = [...packages.map((p) => p.title), ...otherDestinations];
+---
+
+<div class="form-card">
+	<form id="enquiry-form" novalidate>
+		<div class="field">
+			<label for="name">{t.name}</label>
+			<input type="text" id="name" name="name" required autocomplete="name" />
+		</div>
+
+		<div class="field">
+			<label for="email">{t.email}</label>
+			<input type="email" id="email" name="email" required autocomplete="email" />
+		</div>
+
+		<div class="row">
+			<div class="field">
+				<label for="phone">{t.phone} <span>{t.optional}</span></label>
+				<input type="tel" id="phone" name="phone" autocomplete="tel" />
+			</div>
+
+			<div class="field">
+				<label for="travelers">{t.travelers} <span>{t.optional}</span></label>
+				<input type="number" id="travelers" name="travelers" min="1" placeholder="e.g. 2" />
+			</div>
+		</div>
+
+		<div class="field">
+			<label for="destination">{t.destination}</label>
+			<select id="destination" name="destination" required>
+				<option value="" disabled selected>{t.destinationPlaceholder}</option>
+				{destinations.map((d) => <option value={d}>{d}</option>)}
+				<option value="Not sure yet — help me choose">{t.notSure}</option>
+			</select>
+		</div>
+
+		<div class="field">
+			<label for="safari-style">{t.safariStyle} <span>{t.optional}</span></label>
+			<select id="safari-style" name="safariStyle">
+				<option value="">—</option>
+				{safariCategories.map((c) => <option value={c}>{c}</option>)}
+			</select>
+		</div>
+
+		<div class="field">
+			<label for="dates">{t.dates} <span>{t.optional}</span></label>
+			<input type="text" id="dates" name="dates" placeholder={t.datesPlaceholder} />
+		</div>
+
+		<div class="field">
+			<label for="message">{t.message} <span>{t.optional}</span></label>
+			<textarea id="message" name="message" rows="4"></textarea>
+		</div>
+
+		<p class="note" id="enquiry-note" role="status" aria-live="polite" hidden></p>
+
+		<button class="btn btn-primary" type="submit" id="enquiry-submit">
+			<span class="btn-label">{t.submit}</span>
+		</button>
+	</form>
+</div>
+
+<script
+	define:vars={{
+		labels: {
+			name: t.name,
+			email: t.email,
+			phone: t.phone,
+			destination: t.destination,
+			safariStyle: t.safariStyle,
+			travelers: t.travelers,
+			dates: t.dates,
+		},
+		errorRequired: t.errorRequired,
+		successOpening: t.successOpening,
+		subjectPrefix: t.subjectPrefix,
+		noMessage: t.noMessage,
+	}}
+>
+	const form = document.getElementById('enquiry-form');
+	const note = document.getElementById('enquiry-note');
+	const submitBtn = document.getElementById('enquiry-submit');
+	const requiredFields = ['name', 'email', 'destination'];
+	const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	function setFieldState(fieldEl, invalid) {
+		if (!fieldEl) return;
+		fieldEl.classList.toggle('invalid', invalid);
+	}
+
+	function clearInvalid(event) {
+		setFieldState(event.target, false);
+	}
+
+	for (const name of requiredFields) {
+		const el = form?.elements.namedItem(name);
+		el?.addEventListener('input', clearInvalid);
+		el?.addEventListener('change', clearInvalid);
+	}
+
+	form?.addEventListener('submit', (event) => {
+		event.preventDefault();
+
+		const data = new FormData(form);
+		const name = String(data.get('name') || '').trim();
+		const email = String(data.get('email') || '').trim();
+		const destination = String(data.get('destination') || '').trim();
+
+		let firstInvalid = null;
+		const nameEl = form.elements.namedItem('name');
+		const emailEl = form.elements.namedItem('email');
+		const destinationEl = form.elements.namedItem('destination');
+
+		setFieldState(nameEl, !name);
+		setFieldState(emailEl, !email || !emailPattern.test(email));
+		setFieldState(destinationEl, !destination);
+
+		if (!name) firstInvalid = firstInvalid || nameEl;
+		if (!email || !emailPattern.test(email)) firstInvalid = firstInvalid || emailEl;
+		if (!destination) firstInvalid = firstInvalid || destinationEl;
+
+		if (firstInvalid) {
+			if (note) {
+				note.hidden = false;
+				note.textContent = errorRequired;
+				note.classList.remove('success');
+				note.classList.add('error');
+			}
+			firstInvalid.focus();
+			return;
+		}
+
+		const phone = String(data.get('phone') || '').trim();
+		const safariStyle = String(data.get('safariStyle') || '').trim();
+		const travelers = String(data.get('travelers') || '').trim();
+		const dates = String(data.get('dates') || '').trim();
+		const message = String(data.get('message') || '').trim();
+
+		const lines = [
+			`${labels.name}: ${name}`,
+			`${labels.email}: ${email}`,
+			phone && `${labels.phone}: ${phone}`,
+			`${labels.destination}: ${destination}`,
+			safariStyle && `${labels.safariStyle}: ${safariStyle}`,
+			travelers && `${labels.travelers}: ${travelers}`,
+			dates && `${labels.dates}: ${dates}`,
+			'',
+			message || noMessage,
+		].filter((line) => line !== '' && line !== false);
+
+		const subject = `${subjectPrefix}${destination}`;
+		const body = lines.join('\n');
+		const mailto = `mailto:info@egersundtanzaniasafaris.com?subject=${encodeURIComponent(
+			subject
+		)}&body=${encodeURIComponent(body)}`;
+
+		if (note) {
+			note.hidden = false;
+			note.textContent = successOpening;
+			note.classList.remove('error');
+			note.classList.add('success');
+		}
+
+		submitBtn?.classList.add('is-sent');
+
+		window.location.href = mailto;
+	});
+</script>
+
+<style>
+	.form-card {
+		background: var(--color-paper);
+		border-radius: 10px;
+		box-shadow: 0 24px 60px -16px rgba(18, 18, 18, 0.35);
+		padding: clamp(1.75rem, 4vw, 2.75rem);
+		max-width: 560px;
+		margin: 0 auto;
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.2rem;
+		text-align: left;
+	}
+
+	.row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.1rem;
+	}
+
+	.field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.45rem;
+	}
+
+	label {
+		font-family: var(--font-accent);
+		font-size: 0.76rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-ink);
+	}
+
+	label span {
+		font-weight: 400;
+		text-transform: none;
+		letter-spacing: normal;
+		color: var(--color-muted);
+	}
+
+	input,
+	select,
+	textarea {
+		font-family: var(--font-body);
+		font-size: 0.95rem;
+		color: var(--color-ink);
+		background: var(--color-paper-dim);
+		border: 1.5px solid transparent;
+		border-radius: 6px;
+		padding: 0.75rem 0.9rem;
+		outline: none;
+		transition:
+			border-color var(--transition-base),
+			background-color var(--transition-base),
+			box-shadow var(--transition-base);
+	}
+
+	input::placeholder,
+	textarea::placeholder {
+		color: var(--color-muted);
+	}
+
+	input:hover,
+	select:hover,
+	textarea:hover {
+		background: #e4d8c2;
+	}
+
+	input:focus,
+	select:focus,
+	textarea:focus {
+		background: var(--color-paper);
+		border-color: var(--color-accent);
+		box-shadow: 0 0 0 3px rgba(255, 77, 28, 0.16);
+	}
+
+	.field.invalid input,
+	.field.invalid select {
+		border-color: var(--color-accent-dark);
+		background: rgba(209, 60, 18, 0.07);
+	}
+
+	select {
+		appearance: none;
+		-webkit-appearance: none;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23121212' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+		background-repeat: no-repeat;
+		background-position: right 0.85rem center;
+		background-size: 13px;
+		padding-right: 2.4rem;
+		cursor: pointer;
+	}
+
+	textarea {
+		resize: vertical;
+		min-height: 90px;
+		font-family: inherit;
+	}
+
+	.note {
+		margin: 0;
+		font-size: 0.85rem;
+		font-weight: 500;
+		padding: 0.65rem 0.9rem;
+		border-radius: 6px;
+		line-height: 1.4;
+	}
+
+	.note.error {
+		color: var(--color-accent-dark);
+		background: rgba(209, 60, 18, 0.1);
+	}
+
+	.note.success {
+		color: var(--color-ink);
+		background: var(--color-paper-dim);
+	}
+
+	button[type='submit'] {
+		align-self: flex-start;
+		background-color: var(--color-ink);
+		color: var(--color-paper);
+		box-shadow: 0 10px 24px -10px rgba(18, 18, 18, 0.5);
+		transition:
+			background-color var(--transition-base),
+			color var(--transition-base),
+			transform var(--transition-base),
+			box-shadow var(--transition-base);
+	}
+
+	button[type='submit']:hover {
+		background-color: var(--color-accent);
+		color: var(--color-ink);
+		transform: translateY(-1px);
+		box-shadow: 0 14px 28px -10px rgba(255, 77, 28, 0.45);
+	}
+
+	button[type='submit']:active {
+		transform: translateY(0);
+	}
+
+	button[type='submit'].is-sent {
+		background-color: var(--color-accent);
+		color: var(--color-ink);
+	}
+
+	@media (max-width: 520px) {
+		.row {
+			grid-template-columns: 1fr;
+		}
+
+		.form-card {
+			border-radius: 8px;
+		}
+	}
+</style>

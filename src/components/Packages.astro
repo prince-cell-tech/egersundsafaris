@@ -1,0 +1,236 @@
+---
+import { packages } from '../data/packages';
+import { getDict, type Lang } from '../i18n/translations';
+
+interface Props {
+	lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = getDict(lang).packages;
+
+const displayPrice = (price: string) => (price === 'On Request' ? t.priceOnRequest : price);
+const displayDays = (days?: string) => (days ? t.daysMap[days] ?? days : undefined);
+---
+
+<section class="packages" id="packages">
+	<p class="eyebrow" data-animate>{t.eyebrow}</p>
+	<h2 class="section-title" data-animate style="--anim-delay: 0.1s">
+		{t.heading}
+	</h2>
+	<p class="section-sub" data-animate style="--anim-delay: 0.2s">
+		{t.subheading}
+	</p>
+
+	<div class="grid">
+		{
+			packages.map((pkg, i) => (
+				<article
+					class="card zoomable"
+					data-animate
+					style={`--anim-delay: ${(i % 3) * 0.15}s`}
+				>
+					<div class="thumb">
+						<img src={pkg.image} alt={pkg.alt} loading="lazy" width="600" height="400" />
+						{pkg.days && <span class="days">{displayDays(pkg.days)}</span>}
+					</div>
+					<div class="body">
+						<h3>{pkg.title}</h3>
+
+						{pkg.tiers && (
+							<ul class="tiers">
+								{pkg.tiers.map((tier) => (
+									<li>
+										<span class="tier-name">{t.tierNames[tier.key]}</span>
+										<span class="tier-price">
+											{tier.perPerson} {t.perPerson} / {tier.perCouple} {t.perCouple}
+										</span>
+									</li>
+								))}
+							</ul>
+						)}
+
+						<div class="row">
+							<span class="price">
+								{pkg.tiers && <span class="from">{t.fromPrice} </span>}
+								{displayPrice(pkg.price)}
+								{pkg.price !== 'On Request' && <span class="pp"> {t.perPersonAbbrev}</span>}
+							</span>
+							<a href="#contact" class="book">
+								{t.bookNow}
+							</a>
+						</div>
+
+						{pkg.mixedAvailable && <p class="mixed-note">{t.mixedNote}</p>}
+					</div>
+				</article>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	@import '../styles/animations.css';
+
+	.packages {
+		max-width: 1160px;
+		margin: 0 auto;
+		padding: 5rem 1.5rem;
+		text-align: center;
+	}
+
+	.section-title {
+		font-size: clamp(2.1rem, 4.5vw, 3rem);
+		color: var(--color-ink);
+		margin: 0.4rem 0 0.6rem;
+	}
+
+	.section-sub {
+		font-size: 1.05rem;
+		color: var(--color-muted);
+		max-width: 560px;
+		margin: 0 auto 2.75rem;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+		gap: 1.8rem;
+		text-align: left;
+	}
+
+	.card {
+		background: var(--color-paper);
+		border-radius: 4px;
+		overflow: hidden;
+		border: 1px solid var(--color-paper-dim);
+		transition: border-color var(--transition-base) var(--ease-out-soft);
+	}
+
+	.card:hover {
+		border-color: var(--color-ink);
+	}
+
+	.thumb {
+		position: relative;
+		aspect-ratio: 3 / 2;
+	}
+
+	.thumb img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.days {
+		position: absolute;
+		top: 0;
+		left: 0;
+		background: var(--color-accent);
+		color: var(--color-ink);
+		font-family: var(--font-accent);
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		padding: 0.35rem 0.75rem;
+	}
+
+	.body {
+		padding: 1.2rem 1.3rem 1.4rem;
+	}
+
+	h3 {
+		font-size: 1.2rem;
+		margin: 0 0 0.9rem;
+		color: var(--color-ink);
+	}
+
+	.tiers {
+		list-style: none;
+		margin: 0 0 1rem;
+		padding: 0;
+		border-top: 1px solid var(--color-paper-dim);
+		border-bottom: 1px solid var(--color-paper-dim);
+	}
+
+	.tiers li {
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+		padding: 0.55rem 0;
+	}
+
+	.tiers li + li {
+		border-top: 1px solid var(--color-paper-dim);
+	}
+
+	.tier-name {
+		font-family: var(--font-accent);
+		font-size: 0.78rem;
+		font-weight: 600;
+		color: var(--color-ink);
+	}
+
+	.tier-price {
+		font-size: 0.82rem;
+		color: var(--color-muted);
+	}
+
+	.price .from {
+		font-family: var(--font-accent);
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: var(--color-muted);
+	}
+
+	.price .pp {
+		font-family: var(--font-accent);
+		font-size: 0.72rem;
+		font-weight: 500;
+		color: var(--color-muted);
+	}
+
+	.mixed-note {
+		margin: 0.8rem 0 0;
+		font-size: 0.78rem;
+		line-height: 1.5;
+		color: var(--color-muted);
+	}
+
+	.row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.price {
+		font-family: var(--font-heading);
+		font-size: 1.3rem;
+		font-weight: 700;
+		color: var(--color-ink);
+	}
+
+	.book {
+		font-family: var(--font-accent);
+		font-weight: 600;
+		font-size: 0.85rem;
+		letter-spacing: 0.04em;
+		text-decoration: none;
+		color: var(--color-ink);
+		border: 2px solid var(--color-ink);
+		border-radius: 4px;
+		padding: 0.45rem 1rem;
+		transition:
+			background-color var(--transition-base),
+			color var(--transition-base);
+	}
+
+	.book:hover {
+		background-color: var(--color-accent);
+		border-color: var(--color-accent);
+		color: var(--color-ink);
+	}
+</style>
