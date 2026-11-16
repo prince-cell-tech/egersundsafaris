@@ -10,9 +10,7 @@
 name: Build and deploy to Hostinger
 
 on:
-  push:
-    branches: [main]
-  workflow_dispatch: # allow manual runs from the Actions tab
+  workflow_dispatch: # manual runs only (from the Actions tab); auto-deploy was disabled in favour of manual Hostinger uploads
 
 concurrency:
   group: deploy-hostinger
