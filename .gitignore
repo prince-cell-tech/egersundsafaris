@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# local docs / reports
+*.pptx
+
 # macOS-specific files
 .DS_Store
 

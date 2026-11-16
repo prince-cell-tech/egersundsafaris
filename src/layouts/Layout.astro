@@ -11,6 +11,16 @@ const { lang = 'en' } = Astro.props;
 const t = getDict(lang);
 const current = languages.find((l) => l.code === lang) ?? languages[0];
 
+const gaId = import.meta.env.PUBLIC_GA_ID;
+// Accept a GA4 measurement ID (G-XXXXXXXXXX) or a Google Tag Manager
+// container ID (GTM-XXXXXXXX). Each uses its own loader script URL.
+const gaKind = gaId?.startsWith('G-') ? 'gtag' : gaId?.startsWith('GTM-') ? 'gtm' : null;
+const hasGa = gaKind !== null;
+const gaScriptUrl =
+	gaKind === 'gtm'
+		? `https://www.googletagmanager.com/gtm.js?id=${gaId}`
+		: `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+
 const siteUrl = Astro.site ?? new URL('https://egersundtanzaniasafaris.com');
 const canonicalURL = new URL(current.path, siteUrl).toString();
 const ogImage = 'https://images.unsplash.com/photo-1761078206756-68d3023f3021?auto=format&fit=crop&w=1200&h=630&q=70';
@@ -102,6 +112,20 @@ const structuredData = {
 			rel="stylesheet"
 			href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
 		/>
+
+		{/* Google Analytics / Tag Manager — set PUBLIC_GA_ID=G-… or GTM-… in .env to enable */}
+		{
+			hasGa && (
+				<>
+					<link rel="preconnect" href="https://www.googletagmanager.com" />
+					<script async src={gaScriptUrl} />
+					<script
+						is:inline
+						set:html={`window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', '${gaId}');`}
+					/>
+				</>
+			)
+		}
 	</head>
 	<body>
 		<slot />

@@ -117,9 +117,9 @@ export const dictionaries: Record<Lang, Dict> = {
 		htmlLang: 'en',
 		selectLanguage: 'Select language',
 		seo: {
-			title: 'Egersund Safaris | Tanzania Safari Tours, Kilimanjaro & Zanzibar',
+			title: 'Egersund Safaris | Tanzania Safari, Kilimanjaro & Zanzibar',
 			description:
-				'Handcrafted Tanzania safari tours with private guides and jeeps — Serengeti, Ngorongoro, Tarangire, Kilimanjaro climbs, and Zanzibar beach holidays. Plan your trip today.',
+				'Handcrafted Tanzania safari tours with private guides & jeeps — Serengeti, Ngorongoro, Tarangire, Kilimanjaro & Zanzibar beaches. Plan your trip today.',
 		},
 		hero: {
 			eyebrow: 'Egersund Safaris',
@@ -290,7 +290,7 @@ export const dictionaries: Record<Lang, Dict> = {
 		seo: {
 			title: 'Egersund Safaris | Safari i Tanzania, Kilimanjaro & Zanzibar',
 			description:
-				'Skreddersydde safarireiser i Tanzania med private guider og jeeper — Serengeti, Ngorongoro, Tarangire, Kilimanjaro-bestigning og strandferie på Zanzibar. Planlegg reisen din i dag.',
+				'Skreddersydde safarireiser i Tanzania med private guider og jeeper — Serengeti, Ngorongoro, Tarangire, Kilimanjaro og Zanzibar. Planlegg reisen i dag.',
 		},
 		hero: {
 			eyebrow: 'Egersund Safaris',
@@ -461,7 +461,7 @@ export const dictionaries: Record<Lang, Dict> = {
 		seo: {
 			title: 'Egersund Safaris | Safari i Tanzania, Kilimanjaro & Zanzibar',
 			description:
-				'Skräddarsydda safariresor i Tanzania med privata guider och jeepar — Serengeti, Ngorongoro, Tarangire, Kilimanjaro-bestigning och strandsemester på Zanzibar. Planera din resa idag.',
+				'Skräddarsydda safariresor i Tanzania med privata guider och jeepar — Serengeti, Ngorongoro, Tarangire, Kilimanjaro och Zanzibar. Planera din resa idag.',
 		},
 		hero: {
 			eyebrow: 'Egersund Safaris',
@@ -632,7 +632,7 @@ export const dictionaries: Record<Lang, Dict> = {
 		seo: {
 			title: 'Egersund Safaris | Safari i Tanzania, Kilimanjaro & Zanzibar',
 			description:
-				'Skræddersyede safarirejser i Tanzania med private guider og jeeps — Serengeti, Ngorongoro, Tarangire, Kilimanjaro-bestigning og strandferie på Zanzibar. Planlæg din rejse i dag.',
+				'Skræddersyede safarirejser i Tanzania med private guider og jeeps — Serengeti, Ngorongoro, Tarangire, Kilimanjaro og Zanzibar. Planlæg rejsen i dag.',
 		},
 		hero: {
 			eyebrow: 'Egersund Safaris',
@@ -974,7 +974,7 @@ export const dictionaries: Record<Lang, Dict> = {
 		seo: {
 			title: 'Egersund Safaris | Tansania-Safaris, Kilimanjaro & Sansibar',
 			description:
-				'Maßgeschneiderte Safaris in Tansania mit privaten Guides und Jeeps — Serengeti, Ngorongoro, Tarangire, Kilimanjaro-Besteigung und Strandurlaub auf Sansibar. Jetzt Reise planen.',
+				'Maßgeschneiderte Tansania-Safaris mit privaten Guides & Jeeps — Serengeti, Ngorongoro, Tarangire, Kilimanjaro & Sansibar. Jetzt Reise planen.',
 		},
 		hero: {
 			eyebrow: 'Egersund Safaris',

@@ -13,3 +13,42 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
 ErrorDocument 404 /index.php
+
+# --- Compression (LiteSpeed honours mod_deflate) ---
+<IfModule mod_deflate.c>
+	AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+	AddOutputFilterByType DEFLATE application/javascript application/json
+	AddOutputFilterByType DEFLATE image/svg+xml application/xml
+</IfModule>
+
+# --- Browser caching ---
+<IfModule mod_expires.c>
+	ExpiresActive On
+	# Hashed Astro assets: cache hard
+	ExpiresByType text/css "access plus 1 year"
+	ExpiresByType application/javascript "access plus 1 year"
+	# Images and fonts: cache long
+	ExpiresByType image/jpeg "access plus 6 months"
+	ExpiresByType image/png "access plus 6 months"
+	ExpiresByType image/gif "access plus 6 months"
+	ExpiresByType image/webp "access plus 6 months"
+	ExpiresByType image/avif "access plus 6 months"
+	ExpiresByType image/svg+xml "access plus 6 months"
+	ExpiresByType font/woff2 "access plus 1 year"
+	# HTML: always revalidate so deploys go live immediately
+	ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+	# CSS/JS are content-hashed by Astro, so long immutable caching is safe
+	<FilesMatch "\.(css|js|woff2)$">
+		Header set Cache-Control "public, max-age=31536000, immutable"
+	</FilesMatch>
+	# Images keep stable filenames and can be replaced, so no "immutable"
+	<FilesMatch "\.(jpg|jpeg|png|gif|webp|avif|svg)$">
+		Header set Cache-Control "public, max-age=2592000"
+	</FilesMatch>
+	<FilesMatch "\.html$">
+		Header set Cache-Control "no-cache, must-revalidate"
+	</FilesMatch>
+</IfModule>
