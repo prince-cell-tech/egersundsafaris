@@ -1,0 +1,69 @@
+# Builds the Astro site and FTP-deploys it to Hostinger on every push to main.
+#
+# Required GitHub secrets (repo Settings > Secrets and variables > Actions):
+#   FTP_HOST       - e.g. ftp.hostinger.com (hPanel > Files > FTP accounts)
+#   FTP_USERNAME   - your FTP account username
+#   FTP_PASSWORD   - your FTP account password
+#   FTP_TARGET_DIR - optional, defaults to public_html
+#   PUBLIC_GA_ID   - Google Analytics 4 ID (G-...) or GTM container (GTM-...)
+#
+name: Build and deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # allow manual runs from the Actions tab
+
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build site
+        env:
+          PUBLIC_GA_ID: ${{ secrets.PUBLIC_GA_ID }}
+        run: pnpm build
+
+      - name: Deploy via FTPS
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_TARGET: ${{ secrets.FTP_TARGET_DIR }}
+        run: |
+          TARGET="${FTP_TARGET:-public_html}"
+          lftp -c "
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate true;
+            set net:max-retries 3;
+            open -u '$FTP_USERNAME','$FTP_PASSWORD' '$FTP_HOST';
+            mkdir -p '$TARGET';
+            cd '$TARGET';
+            put .htaccess;
+            put index.php;
+            mkdir -p dist;
+            cd dist;
+            lcd dist;
+            mirror --reverse --delete --parallel=4 --verbose;
+          "
