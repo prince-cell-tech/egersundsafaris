@@ -31,6 +31,14 @@ export type Topic = {
 	packagesEyebrow: string;
 	packagesHeading: string;
 	packageTitles: string[];
+	video?: {
+		heading: string;
+		src: string;
+		poster: string;
+		caption: string;
+		width: number;
+		height: number;
+	};
 	faq: { eyebrow: string; heading: string; items: { q: string; a: string }[] };
 	cta: { eyebrow: string; heading: string; text: string };
 };
@@ -136,6 +144,15 @@ export const greatMigration: Topic = {
 	packagesEyebrow: 'Ready-Made Starting Points',
 	packagesHeading: 'Migration-Friendly Safaris',
 	packageTitles: ['Northern Circuit Classic', 'Egersund Classic 6 Days'],
+	video: {
+		heading: 'The Migration in Motion',
+		src: '/videos/great-migration.mp4',
+		poster: '/videos/great-migration-poster.jpg',
+		caption:
+			'Wildebeest crossing the river during the Great Migration — filmed on one of our northern Serengeti safari routes.',
+		width: 360,
+		height: 640,
+	},
 	faq: {
 		eyebrow: 'Good to Know',
 		heading: 'Great Migration Questions',
