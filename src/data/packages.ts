@@ -15,6 +15,8 @@ export type Package = {
 	category: PackageCategory;
 	/** Optional marketing badge shown on the card. */
 	badge?: 'bestseller' | 'popular' | 'vip';
+	/** Optional attribution line, required for CC-licensed photos. */
+	credit?: { label: string; url: string };
 	tiers?: PriceTier[];
 	mixedAvailable?: boolean;
 };
@@ -63,9 +65,12 @@ export const packages: Package[] = [
 		price: '$210',
 		days: '1 Day',
 		category: 'dayTrips',
-		image:
-			'https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=1200&q=75',
-		alt: 'Wildlife near Lake Manyara, Tanzania',
+		image: '/images/packages/lake-manyara.jpg',
+		alt: 'Zebras grazing on the plains below the Rift Valley escarpment at Lake Manyara National Park, Tanzania',
+		credit: {
+			label: 'Photo: Wegmann & Bevanda / Wikimedia Commons, CC BY-SA 3.0',
+			url: 'https://commons.wikimedia.org/wiki/File:Lake_manyara_2012_authorBevanda_Wegmann2.JPG',
+		},
 	},
 	{
 		title: 'Ngorongoro Day Trip',
