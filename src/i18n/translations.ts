@@ -12,6 +12,8 @@ export const languages: { code: Lang; label: string; path: string }[] = [
 type Dict = {
 	htmlLang: string;
 	selectLanguage: string;
+	/** Localized safari-type label -> path of the page it should link to (if any). */
+	safariTypeLinks: Record<string, string>;
 	seo: {
 		title: string;
 		description: string;
@@ -116,6 +118,10 @@ export const dictionaries: Record<Lang, Dict> = {
 	en: {
 		htmlLang: 'en',
 		selectLanguage: 'Select language',
+		safariTypeLinks: {
+			'Great Migration Safaris': '/great-migration-safari/',
+			'Honeymoon Safaris': '/honeymoon-safari/',
+		},
 		seo: {
 			title: 'Egersund Safaris | Tanzania Safari, Kilimanjaro & Zanzibar',
 			description:
@@ -287,6 +293,10 @@ export const dictionaries: Record<Lang, Dict> = {
 	no: {
 		htmlLang: 'no',
 		selectLanguage: 'Velg språk',
+		safariTypeLinks: {
+			'Safari under Den Store Vandringen': '/great-migration-safari/',
+			'Bryllupsreise-safarier': '/honeymoon-safari/',
+		},
 		seo: {
 			title: 'Egersund Safaris | Safari i Tanzania, Kilimanjaro & Zanzibar',
 			description:
@@ -458,6 +468,10 @@ export const dictionaries: Record<Lang, Dict> = {
 	sv: {
 		htmlLang: 'sv',
 		selectLanguage: 'Välj språk',
+		safariTypeLinks: {
+			'Safari under Den Stora Vandringen': '/great-migration-safari/',
+			'Smekmånadssafarier': '/honeymoon-safari/',
+		},
 		seo: {
 			title: 'Egersund Safaris | Safari i Tanzania, Kilimanjaro & Zanzibar',
 			description:
@@ -629,6 +643,10 @@ export const dictionaries: Record<Lang, Dict> = {
 	da: {
 		htmlLang: 'da',
 		selectLanguage: 'Vælg sprog',
+		safariTypeLinks: {
+			'Safari under Den Store Vandring': '/great-migration-safari/',
+			'Bryllupsrejsesafarier': '/honeymoon-safari/',
+		},
 		seo: {
 			title: 'Egersund Safaris | Safari i Tanzania, Kilimanjaro & Zanzibar',
 			description:
@@ -800,6 +818,10 @@ export const dictionaries: Record<Lang, Dict> = {
 	zh: {
 		htmlLang: 'zh-CN',
 		selectLanguage: '选择语言',
+		safariTypeLinks: {
+			'大迁徙野生动物园': '/great-migration-safari/',
+			'蜜月野生动物园': '/honeymoon-safari/',
+		},
 		seo: {
 			title: 'Egersund Safaris | 坦桑尼亚野生动物园、乞力马扎罗与桑给巴尔之旅',
 			description:
@@ -971,6 +993,10 @@ export const dictionaries: Record<Lang, Dict> = {
 	de: {
 		htmlLang: 'de',
 		selectLanguage: 'Sprache wählen',
+		safariTypeLinks: {
+			'Great-Migration-Safaris': '/great-migration-safari/',
+			'Flitterwochen-Safaris': '/honeymoon-safari/',
+		},
 		seo: {
 			title: 'Egersund Safaris | Tansania-Safaris, Kilimanjaro & Sansibar',
 			description:

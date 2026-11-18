@@ -5,9 +5,26 @@ import { getDict, languages, type Lang } from '../i18n/translations';
 
 interface Props {
 	lang?: Lang;
+	/** Canonical path for non-home pages, e.g. '/great-migration-safari/'. Defaults to the locale home path. */
+	slug?: string;
+	/** Override the dictionary's default page title. */
+	title?: string;
+	/** Override the dictionary's default meta description. */
+	description?: string;
+	/** Override the default social sharing image. */
+	ogImage?: string;
+	/** English-only page: emit a single self-referential hreflang instead of all locales. */
+	standalone?: boolean;
 }
 
-const { lang = 'en' } = Astro.props;
+const {
+	lang = 'en',
+	slug,
+	title: titleProp,
+	description: descriptionProp,
+	ogImage: ogImageProp,
+	standalone = false,
+} = Astro.props;
 const t = getDict(lang);
 const current = languages.find((l) => l.code === lang) ?? languages[0];
 
@@ -22,11 +39,12 @@ const gaScriptUrl =
 		: `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
 
 const siteUrl = Astro.site ?? new URL('https://egersundtanzaniasafaris.com');
-const canonicalURL = new URL(current.path, siteUrl).toString();
-const ogImage = 'https://images.unsplash.com/photo-1761078206756-68d3023f3021?auto=format&fit=crop&w=1200&h=630&q=70';
+const canonicalURL = new URL(slug ?? current.path, siteUrl).toString();
+const ogImage =
+	ogImageProp ?? 'https://images.unsplash.com/photo-1761078206756-68d3023f3021?auto=format&fit=crop&w=1200&h=630&q=70';
 
-const title = t.seo.title;
-const description = t.seo.description;
+const title = titleProp ?? t.seo.title;
+const description = descriptionProp ?? t.seo.description;
 
 // Open Graph locale codes expect underscores (e.g. en_US, zh_CN).
 const ogLocaleMap: Record<Lang, string> = {
@@ -75,11 +93,18 @@ const structuredData = {
 
 		{/* hreflang alternates — point search engines to every locale of this same page */}
 		{
-			languages.map((l) => (
-				<link rel="alternate" hreflang={l.code === 'zh' ? 'zh-CN' : l.code} href={new URL(l.path, siteUrl).toString()} />
-			))
+			standalone ? (
+				<>
+					<link rel="alternate" hreflang="en" href={canonicalURL} />
+					<link rel="alternate" hreflang="x-default" href={canonicalURL} />
+				</>
+			) : (
+				languages.map((l) => (
+					<link rel="alternate" hreflang={l.code === 'zh' ? 'zh-CN' : l.code} href={new URL(l.path, siteUrl).toString()} />
+				))
+			)
 		}
-		<link rel="alternate" hreflang="x-default" href={new URL('/', siteUrl).toString()} />
+		{!standalone && <link rel="alternate" hreflang="x-default" href={new URL('/', siteUrl).toString()} />}
 
 		{/* Open Graph */}
 		<meta property="og:type" content="website" />
@@ -92,9 +117,10 @@ const structuredData = {
 		<meta property="og:image:height" content="630" />
 		<meta property="og:locale" content={ogLocaleMap[lang]} />
 		{
-			languages
-				.filter((l) => l.code !== lang)
-				.map((l) => <meta property="og:locale:alternate" content={ogLocaleMap[l.code]} />)
+			!standalone &&
+				languages
+					.filter((l) => l.code !== lang)
+					.map((l) => <meta property="og:locale:alternate" content={ogLocaleMap[l.code]} />)
 		}
 
 		{/* Twitter */}

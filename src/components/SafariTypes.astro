@@ -6,7 +6,9 @@ interface Props {
 }
 
 const { lang = 'en' } = Astro.props;
-const t = getDict(lang).safariTypes;
+const dict = getDict(lang);
+const t = dict.safariTypes;
+const links = dict.safariTypeLinks;
 ---
 
 <section class="safari-types" id="safari-types">
@@ -16,17 +18,23 @@ const t = getDict(lang).safariTypes;
 
 	<div class="tags" data-animate style="--anim-delay: 0.2s">
 		{
-			t.categories.map((category) => (
-				<button type="button" class="tag" data-category={category}>
-					{category}
-				</button>
-			))
+			t.categories.map((category) =>
+				links[category] ? (
+					<a class="tag tag-link" href={links[category]}>
+						{category}
+					</a>
+				) : (
+					<button type="button" class="tag" data-category={category}>
+						{category}
+					</button>
+				)
+			)
 		}
 	</div>
 </section>
 
 <script>
-	const tags = document.querySelectorAll<HTMLButtonElement>('.safari-types .tag');
+	const tags = document.querySelectorAll<HTMLButtonElement>('.safari-types button.tag');
 
 	for (const tag of tags) {
 		tag.addEventListener('click', () => {
@@ -84,10 +92,16 @@ const t = getDict(lang).safariTypes;
 		border-radius: 4px;
 		padding: 0.7rem 1.3rem;
 		cursor: pointer;
+		text-decoration: none;
 		transition:
 			background-color var(--transition-base),
 			color var(--transition-base),
 			border-color var(--transition-base);
+	}
+
+	.tag-link::after {
+		content: ' →';
+		color: var(--color-accent);
 	}
 
 	.tag:hover {
