@@ -79,6 +79,9 @@ type Dict = {
 		perCouple: string;
 		tierNames: Record<'camping' | 'midRange' | 'luxury', string>;
 		mixedNote: string;
+		categories: Record<'dayTrips' | 'kilimanjaro' | 'northern' | 'zanzibar' | 'combined', string>;
+		badges: Record<'bestseller' | 'popular' | 'vip', string>;
+		vatNote: string;
 	};
 	contact: {
 		eyebrow: string;
@@ -243,7 +246,11 @@ export const dictionaries: Record<Lang, Dict> = {
 				'1 Day': '1 Day',
 				'3 Days': '3 Days',
 				'4 Days': '4 Days',
-				'9 Days': '9 Days',
+				'5 Days': '5 Days',
+				'6 Days': '6 Days',
+				'7 Days': '7 Days',
+				'10 Days': '10 Days',
+				'15 Days': '15 Days',
 				'Multi-Day': 'Multi-Day',
 			},
 			fromPrice: 'From',
@@ -255,6 +262,16 @@ export const dictionaries: Record<Lang, Dict> = {
 				luxury: 'Luxury Hotels',
 			},
 			mixedNote: 'Want to mix camping and hotel stays? Pricing available on request.',
+			categories: {
+				dayTrips: 'Day Trips from Arusha',
+				kilimanjaro: 'Kilimanjaro Climbing',
+				northern: 'Northern Parks',
+				zanzibar: 'Zanzibar',
+				combined: 'Safari & Zanzibar Combined',
+			},
+			badges: { bestseller: 'Bestseller', popular: 'Most Popular', vip: 'VIP' },
+			vatNote:
+				'All prices are per person and include 18% VAT and park fees. No hidden costs.',
 		},
 		contact: {
 			eyebrow: 'Get In Touch',
@@ -418,7 +435,11 @@ export const dictionaries: Record<Lang, Dict> = {
 				'1 Day': '1 Dag',
 				'3 Days': '3 Dager',
 				'4 Days': '4 Dager',
-				'9 Days': '9 Dager',
+				'5 Days': '5 Dager',
+				'6 Days': '6 Dager',
+				'7 Days': '7 Dager',
+				'10 Days': '10 Dager',
+				'15 Days': '15 Dager',
 				'Multi-Day': 'Flere Dager',
 			},
 			fromPrice: 'Fra',
@@ -430,6 +451,16 @@ export const dictionaries: Record<Lang, Dict> = {
 				luxury: 'Luksushotell',
 			},
 			mixedNote: 'Ønsker du å blande camping og hotellopphold? Pris på forespørsel.',
+			categories: {
+				dayTrips: 'Dagsutflukter fra Arusha',
+				kilimanjaro: 'Kilimanjaro',
+				northern: 'Nordlige parker',
+				zanzibar: 'Zanzibar',
+				combined: 'Safari og Zanzibar kombinert',
+			},
+			badges: { bestseller: 'Bestselger', popular: 'Mest populær', vip: 'VIP' },
+			vatNote:
+				'Alle priser er per person og inkluderer 18 % mva og parkavgifter. Ingen skjulte kostnader.',
 		},
 		contact: {
 			eyebrow: 'Ta Kontakt',
@@ -593,7 +624,11 @@ export const dictionaries: Record<Lang, Dict> = {
 				'1 Day': '1 Dag',
 				'3 Days': '3 Dagar',
 				'4 Days': '4 Dagar',
-				'9 Days': '9 Dagar',
+				'5 Days': '5 Dagar',
+				'6 Days': '6 Dagar',
+				'7 Days': '7 Dagar',
+				'10 Days': '10 Dagar',
+				'15 Days': '15 Dagar',
 				'Multi-Day': 'Flera Dagar',
 			},
 			fromPrice: 'Från',
@@ -605,6 +640,16 @@ export const dictionaries: Record<Lang, Dict> = {
 				luxury: 'Lyxhotell',
 			},
 			mixedNote: 'Vill du blanda camping och hotellvistelser? Pris på begäran.',
+			categories: {
+				dayTrips: 'Dagsutflykter från Arusha',
+				kilimanjaro: 'Kilimanjaro',
+				northern: 'Norra parkerna',
+				zanzibar: 'Zanzibar',
+				combined: 'Safari och Zanzibar kombinerat',
+			},
+			badges: { bestseller: 'Bästsäljare', popular: 'Mest populär', vip: 'VIP' },
+			vatNote:
+				'Alla priser är per person och inkluderar 18 % moms och parkavgifter. Inga dolda kostnader.',
 		},
 		contact: {
 			eyebrow: 'Kontakta Oss',
@@ -768,7 +813,11 @@ export const dictionaries: Record<Lang, Dict> = {
 				'1 Day': '1 Dag',
 				'3 Days': '3 Dage',
 				'4 Days': '4 Dage',
-				'9 Days': '9 Dage',
+				'5 Days': '5 Dage',
+				'6 Days': '6 Dage',
+				'7 Days': '7 Dage',
+				'10 Days': '10 Dage',
+				'15 Days': '15 Dage',
 				'Multi-Day': 'Flere Dage',
 			},
 			fromPrice: 'Fra',
@@ -780,6 +829,16 @@ export const dictionaries: Record<Lang, Dict> = {
 				luxury: 'Luksushoteller',
 			},
 			mixedNote: 'Vil du blande camping og hotelophold? Pris efter aftale.',
+			categories: {
+				dayTrips: 'Dagsudflugter fra Arusha',
+				kilimanjaro: 'Kilimanjaro',
+				northern: 'Nordlige parker',
+				zanzibar: 'Zanzibar',
+				combined: 'Safari og Zanzibar kombineret',
+			},
+			badges: { bestseller: 'Bedstesælger', popular: 'Mest populær', vip: 'VIP' },
+			vatNote:
+				'Alle priser er per person og inkluderer 18 % moms og parkgebyrer. Ingen skjulte omkostninger.',
 		},
 		contact: {
 			eyebrow: 'Kom I Kontakt',
@@ -943,7 +1002,11 @@ export const dictionaries: Record<Lang, Dict> = {
 				'1 Day': '1天',
 				'3 Days': '3天',
 				'4 Days': '4天',
-				'9 Days': '9天',
+				'5 Days': '5天',
+				'6 Days': '6天',
+				'7 Days': '7天',
+				'10 Days': '10天',
+				'15 Days': '15天',
 				'Multi-Day': '多日',
 			},
 			fromPrice: '起价',
@@ -955,6 +1018,15 @@ export const dictionaries: Record<Lang, Dict> = {
 				luxury: '豪华酒店',
 			},
 			mixedNote: '想要混合露营与酒店住宿?价格可另行询问。',
+			categories: {
+				dayTrips: '阿鲁沙一日游',
+				kilimanjaro: '乞力马扎罗登山',
+				northern: '北部公园',
+				zanzibar: '桑给巴尔',
+				combined: '野生动物园与桑给巴尔组合',
+			},
+			badges: { bestseller: '热销', popular: '最受欢迎', vip: 'VIP' },
+			vatNote: '所有价格均为每人价格，包含18%增值税和公园门票。无隐藏费用。',
 		},
 		contact: {
 			eyebrow: '联系我们',
@@ -1118,7 +1190,11 @@ export const dictionaries: Record<Lang, Dict> = {
 				'1 Day': '1 Tag',
 				'3 Days': '3 Tage',
 				'4 Days': '4 Tage',
-				'9 Days': '9 Tage',
+				'5 Days': '5 Tage',
+				'6 Days': '6 Tage',
+				'7 Days': '7 Tage',
+				'10 Days': '10 Tage',
+				'15 Days': '15 Tage',
 				'Multi-Day': 'Mehrtägig',
 			},
 			fromPrice: 'Ab',
@@ -1130,6 +1206,16 @@ export const dictionaries: Record<Lang, Dict> = {
 				luxury: 'Luxushotels',
 			},
 			mixedNote: 'Möchten Sie Camping und Hotelaufenthalte kombinieren? Preis auf Anfrage.',
+			categories: {
+				dayTrips: 'Tagesausflüge ab Arusha',
+				kilimanjaro: 'Kilimanjaro-Besteigung',
+				northern: 'Nördliche Parks',
+				zanzibar: 'Sansibar',
+				combined: 'Safari & Sansibar kombiniert',
+			},
+			badges: { bestseller: 'Bestseller', popular: 'Beliebteste', vip: 'VIP' },
+			vatNote:
+				'Alle Preise gelten pro Person und beinhalten 18 % MwSt. und Parkgebühren. Keine versteckten Kosten.',
 		},
 		contact: {
 			eyebrow: 'Kontaktieren Sie Uns',

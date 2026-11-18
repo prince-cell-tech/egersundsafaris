@@ -19,6 +19,7 @@ pnpm-debug.log*
 
 # local docs / reports
 *.pptx
+WhatsApp Image*
 
 # macOS-specific files
 .DS_Store

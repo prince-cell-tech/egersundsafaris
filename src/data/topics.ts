@@ -135,7 +135,7 @@ export const greatMigration: Topic = {
 	},
 	packagesEyebrow: 'Ready-Made Starting Points',
 	packagesHeading: 'Migration-Friendly Safaris',
-	packageTitles: ['Tarangire, Ngorongoro & Serengeti', 'All Northern National Parks'],
+	packageTitles: ['Northern Circuit Classic', 'Egersund Classic 6 Days'],
 	faq: {
 		eyebrow: 'Good to Know',
 		heading: 'Great Migration Questions',
@@ -260,7 +260,7 @@ export const honeymoon: Topic = {
 	},
 	packagesEyebrow: 'Ready-Made Starting Points',
 	packagesHeading: 'Honeymoon-Friendly Safaris',
-	packageTitles: ['Zanzibar to Arusha & Northern Parks', 'All Northern National Parks'],
+	packageTitles: ['Northern + Zanzibar 10 Days', 'Zanzibar Beach 4 Days'],
 	faq: {
 		eyebrow: 'Good to Know',
 		heading: 'Honeymoon Questions',
